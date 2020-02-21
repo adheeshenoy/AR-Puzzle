@@ -204,26 +204,26 @@ class arGame {
 	// takes in a list of distances and a minimum distance. If any of the distances are greater than the minimum
 	// distance, the game is not completed.
 	checkCompleted() {
-		// var newDists = this.getDistances();
-		// var distBools = [];
-		// for (var i = 0; i < newDists.length; ++i) {
-		// 	console.log(newDists[i]);
-		// 	if (newDists[i] < 2.5 && newDists[i] > 0.2) {
-		// 		distBools.push(true);
-		// 	} else {
-		// 		distBools.push(false);
-		// 	}
-		// }
+		var newDists = this.getDistances();
+		var distBools = [];
+		for (var i = 0; i < newDists.length; ++i) {
+			console.log(newDists[i]);
+			if (newDists[i] < 2.5 && newDists[i] > 0.2) {
+				distBools.push(true);
+			} else {
+				distBools.push(false);
+			}
+		}
 
-		// for (var i = 0; i < distBools.length; i++) {
-		// 	if (!distBools[i]) {
-		// 		console.log("False");
-		// 		console.log(newDists);
-		// 		console.log(distBools);
-		// 		return false;
-		// 	}
-		// }
-		// console.log(distBools);
+		for (var i = 0; i < distBools.length; i++) {
+			if (!distBools[i]) {
+				console.log("False");
+				console.log(newDists);
+				console.log(distBools);
+				return false;
+			}
+		}
+		console.log(distBools);
 		return true;
 	}
 
@@ -302,7 +302,7 @@ function processEnd() {
 	}
 	game.tryToAddScore(name, newTimeStr, newMilli);
 	// writeScoresToFile(game.getScores());
-
+	updateScoreboard();
 	// TODO: replace this with
 
 	resetGame();
