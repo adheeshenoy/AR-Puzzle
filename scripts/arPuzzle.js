@@ -7,6 +7,10 @@ var marker21;
 var marker22;
 var marker23;
 var marker24;
+
+var endMessage = document.getElementById("message");
+// var textarea = document.getElementById("textarea");
+
 var startBtn = document.getElementById("start");
 startBtn.addEventListener("click", function() {
 	btnClicked("start");
@@ -25,6 +29,7 @@ var timer = document.getElementById("timerDisplay"); // gets the timer from the 
 // Define UI behaviors
 const submitUI = document.getElementById("input");
 submitUI.style.display = "none";
+const scoreboard = document.getElementById("scoreboard");
 
 class Stopwatch {
 	constructor() {
@@ -104,15 +109,7 @@ class arGame {
 	}
 
 	getDistances() {
-		var distance = new Array(10);
-		console.log(
-			Math.round(
-				marker11
-					.getAttribute("position")
-					.distanceTo(marker12.getAttribute("position")) * 100
-			) / 100
-		);
-		console.log("qwertyui");
+		var distance = new Array();
 		distance.push(
 			Math.round(
 				marker11
@@ -207,15 +204,27 @@ class arGame {
 	// takes in a list of distances and a minimum distance. If any of the distances are greater than the minimum
 	// distance, the game is not completed.
 	checkCompleted() {
-		var newDists = this.getDistances();
-		this.completed = true;
-		for (let dist of newDists)
-			if (dist >= this.minDist || dist <= 0.000001) {
-				this.completed = false;
-				break;
-			}
+		// var newDists = this.getDistances();
+		// var distBools = [];
+		// for (var i = 0; i < newDists.length; ++i) {
+		// 	console.log(newDists[i]);
+		// 	if (newDists[i] < 2.5 && newDists[i] > 0.2) {
+		// 		distBools.push(true);
+		// 	} else {
+		// 		distBools.push(false);
+		// 	}
+		// }
 
-		return this.completed;
+		// for (var i = 0; i < distBools.length; i++) {
+		// 	if (!distBools[i]) {
+		// 		console.log("False");
+		// 		console.log(newDists);
+		// 		console.log(distBools);
+		// 		return false;
+		// 	}
+		// }
+		// console.log(distBools);
+		return true;
 	}
 
 	// trys to add a new score into the list of scores
@@ -266,6 +275,13 @@ function resetGame() {
 	timer.innerHTML = watch.reset();
 	startBtn.style.display = "inline";
 	pauseResetBtn.style.display = "none";
+	const gameSection = document.getElementById("game");
+	const ARFrame = document.getElementById("ARframe");
+	pauseResetBtn.innerHTML = "Reset";
+	gameSection.className = "game";
+	ARFrame.className = "frame";
+	submitUI.style.display = "none";
+	scoreboard.style.display = "inline";
 }
 
 //Game is completed
@@ -276,15 +292,32 @@ function endGame() {
 }
 
 function processEnd() {
-	// var newTimeStr = Take from HTML
+	var newTimeStr = watch.timeStr();
 	var newMilli = watch.getMillTime();
-	// var name = Name submitted
-	// game.tryToAddScore(name, newTimeStr, newMilli);
+	console.log(newTimeStr);
+	console.log(newMilli);
+	var name = textarea.value;
+	if (name.isEmpty()) {
+		processEnd();
+	}
+	game.tryToAddScore(name, newTimeStr, newMilli);
 	// writeScoresToFile(game.getScores());
 
 	// TODO: replace this with
 
 	resetGame();
+}
+
+function updateScoreboard() {
+	var newScores = game.scores;
+	var leaderboard = document.getElementById("leaderboard");
+	for (let i = scores[0].length - 1; i >= 0; i--) {
+		let row = leaderboard.insertRow(0);
+		let name = leaderboard.insertCell(0);
+		let time = leaderboard.insertCell(1);
+		name.innerHTML = scores[0][i];
+		time.innerHTML = score[1][i];
+	}
 }
 
 var btnClicked = function(btnName) {
@@ -315,5 +348,12 @@ function displayEndScreen() {
 	pauseResetBtn.innerHTML = "Reset";
 	gameSection.className = "game-end";
 	ARFrame.className = "frame-end";
-	submitUI.style.display = "inline";
+	if (watch.millis < scores[2][4]) {
+		endMessage.innerText = "Congratulations! You are one of the top 5";
+		submitUI.style.display = "inline";
+	} else {
+		endMessage.innerText = "Sorry you did not make the top 5. Try again!";
+	}
+	endMessage.innerText = "Congratulations! You are one of the top 5";
+	scoreboard.style.display = "none";
 }

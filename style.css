@@ -3,6 +3,7 @@
 	margin: 0;
 	box-sizing: border-box;
 	overflow: hidden;
+	transition: 1s;
 }
 html,
 body {
@@ -79,8 +80,21 @@ textarea {
 	font-size: 1.5rem;
 	border-radius: 20px;
 	padding: 1.4rem 1rem 0rem 1rem;
+	text-align: center;
 }
 
 #leaderboard {
+	/* position: absolute;
+	overflow: auto;
+	top: 0;
+	right: 0;
+	text-align: center; */
+	margin: 2rem auto;
 	font-size: 2rem;
+}
+
+#leaderboard td {
+	/* border-bottom: 2px solid white; */
+	text-align: center;
+	padding: 2rem;
 }
