@@ -8,6 +8,13 @@ var marker22;
 var marker23;
 var marker24;
 
+var scores = [[], [], []];
+for (var i = 0; i < 5; ++i) {
+	scores[0].push("EMPTY");
+	scores[1].push("99:99.9");
+	scores[2].push(9999999999);
+}
+
 var endMessage = document.getElementById("message");
 // var textarea = document.getElementById("textarea");
 
@@ -104,7 +111,6 @@ class arGame {
 	constuctor() {
 		this.gameOver = true;
 		this.completed = false;
-		resetScores();
 		this.running = null;
 	}
 
@@ -192,19 +198,6 @@ class arGame {
 		else return true;
 	}
 
-	getScores() {
-		return this.scores;
-	}
-
-	resetScores() {
-		this.scores = [[], [], []];
-		for (var i = 0; i < 5; ++i) {
-			this.scores[0].push("EMPTY");
-			this.scores[1].push("00:00.0");
-			this.scores[2].push(0);
-		}
-	}
-
 	// sets the game state to currently being solved
 	startGame() {
 		this.completed = false;
@@ -246,19 +239,19 @@ class arGame {
 
 	// inserts a new score into the list of scores
 	tryToAddScore(name, timeStr, totalMillis) {
-		var scoresLen = this.scores.length;
+		var scoresLen = scores[0].length;
 
 		var i = 0;
-		for (; i < scoresLen; ++i) if (totalMillis <= this.scores[2][i]) break;
+		for (; i < scoresLen; ++i) if (totalMillis <= scores[2][i]) break;
 
-		this.scores[0].splice(i, 0, name);
-		this.scores[1].splice(i, 0, timeStr);
-		this.scores[2].splice(i, 0, totalMillis);
+		scores[0].splice(i, 0, name);
+		scores[1].splice(i, 0, timeStr);
+		scores[2].splice(i, 0, totalMillis);
 
-		if (this.scores[0].length == 6) {
-			this.scores[0].splice(5, 1);
-			this.scores[1].splice(5, 1);
-			this.scores[2].splice(5, 1);
+		if (scores[0].length == 6) {
+			scores[0].splice(5, 1);
+			scores[1].splice(5, 1);
+			scores[2].splice(5, 1);
 		}
 	}
 
@@ -319,6 +312,7 @@ function resetGame() {
 	ARFrame.className = "frame";
 	submitUI.style.display = "none";
 	scoreboard.style.display = "inline";
+	endMessage.style.display = "none";
 }
 
 //Game is completed
@@ -334,7 +328,8 @@ function processEnd() {
 	console.log(newTimeStr);
 	console.log(newMilli);
 	var name = textarea.value;
-	if (name.isEmpty()) {
+	textarea.value = "";
+	if (name == "") {
 		processEnd();
 	}
 	game.tryToAddScore(name, newTimeStr, newMilli);
@@ -346,14 +341,19 @@ function processEnd() {
 }
 
 function updateScoreboard() {
-	var newScores = game.scores;
 	var leaderboard = document.getElementById("leaderboard");
+	if (leaderboard.rows.length == 5) {
+		for (let i = 0; i < 5; i++) {
+			leaderboard.deleteRow(0);
+		}
+	}
+
 	for (let i = scores[0].length - 1; i >= 0; i--) {
 		let row = leaderboard.insertRow(0);
-		let name = leaderboard.insertCell(0);
-		let time = leaderboard.insertCell(1);
+		let name = row.insertCell(0);
+		let time = row.insertCell(1);
 		name.innerHTML = scores[0][i];
-		time.innerHTML = score[1][i];
+		time.innerHTML = scores[1][i];
 	}
 }
 
@@ -385,12 +385,15 @@ function displayEndScreen() {
 	pauseResetBtn.innerHTML = "Reset";
 	gameSection.className = "game-end";
 	ARFrame.className = "frame-end";
-	if (watch.millis < scores[2][4]) {
+	endMessage.style.display = "block";
+	if (watch.getMillTime() < scores[2][4]) {
 		endMessage.innerText = "Congratulations! You are one of the top 5";
 		submitUI.style.display = "inline";
 	} else {
+		submitUI.style.display = "none";
 		endMessage.innerText = "Sorry you did not make the top 5. Try again!";
 	}
-	endMessage.innerText = "Congratulations! You are one of the top 5";
 	scoreboard.style.display = "none";
 }
+
+updateScoreboard();
