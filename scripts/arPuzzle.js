@@ -104,10 +104,10 @@ class arGame {
 	constuctor() {
 		this.gameOver = true;
 		this.completed = false;
-    resetScores();
-    this.running = null;
-    }
-  
+		resetScores();
+		this.running = null;
+	}
+
 	getDistances() {
 		var distance = new Array();
 		distance.push(
@@ -188,24 +188,22 @@ class arGame {
 
 	// says whether the puzzle is completed
 	isRunning() {
-		if(this.running == null)
-            return false;
-        else
-            return true;
+		if (this.running == null) return false;
+		else return true;
 	}
 
 	getScores() {
 		return this.scores;
 	}
-    
-    resetScores() {
-        this.scores = [[], [], []];
-        for(var i = 0; i < 5; ++i){
-            this.scores[0].push("EMPTY");
-            this.scores[1].push("00:00.0");
-            this.scores[2].push(0);
-        }
-    }
+
+	resetScores() {
+		this.scores = [[], [], []];
+		for (var i = 0; i < 5; ++i) {
+			this.scores[0].push("EMPTY");
+			this.scores[1].push("00:00.0");
+			this.scores[2].push(0);
+		}
+	}
 
 	// sets the game state to currently being solved
 	startGame() {
@@ -238,38 +236,34 @@ class arGame {
 		console.log(distBools);
 		return true;
 	}
-    
-    // sets all of the game variables 
-    reset() {
-        this.gameOver = true;
-        this.completed = false;
-        this.running = null;
-    }
-  
+
+	// sets all of the game variables
+	reset() {
+		this.gameOver = true;
+		this.completed = false;
+		this.running = null;
+	}
+
 	// inserts a new score into the list of scores
 	tryToAddScore(name, timeStr, totalMillis) {
-        var scoresLen = this.scores.length;
-        
-        var i = 0;
-        for(; i < scoresLen; ++i)
-            if(totalMillis <= this.scores[2][i])
-                break;
-        
-        this.scores[0].splice(i, 0, name)
-        this.scores[1].splice(i, 0, timeStr)
-        this.scores[2].splice(i, 0, totalMillis)
-        
-        if(this.scores[0].length == 6){
-            this.scores[0].splice(5, 1)
-            this.scores[1].splice(5, 1)
-            this.scores[2].splice(5, 1)
-        }
-            
-    }
+		var scoresLen = this.scores.length;
+
+		var i = 0;
+		for (; i < scoresLen; ++i) if (totalMillis <= this.scores[2][i]) break;
+
+		this.scores[0].splice(i, 0, name);
+		this.scores[1].splice(i, 0, timeStr);
+		this.scores[2].splice(i, 0, totalMillis);
+
+		if (this.scores[0].length == 6) {
+			this.scores[0].splice(5, 1);
+			this.scores[1].splice(5, 1);
+			this.scores[2].splice(5, 1);
+		}
+	}
 
 	// progresses the game state and calculates game information from the current state
 	continue() {}
-  
 }
 
 // function that progresses the game
@@ -312,10 +306,9 @@ function pauseGame() {
 
 // completely resets the game
 function resetGame() {
-    if(game.running != null)
-        clearInterval(game.running);
-    game.reset;
-    
+	if (game.running != null) clearInterval(game.running);
+	game.reset;
+
 	timer.innerHTML = watch.reset();
 	startBtn.style.display = "inline";
 	pauseResetBtn.style.display = "none";
