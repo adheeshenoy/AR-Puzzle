@@ -186,9 +186,6 @@ class arGame {
 					.distanceTo(marker24.getAttribute("position")) * 100
 			) / 100
 		);
-		for (let i = 0; i < distance.length; i++) {
-			console.log(distance[i]);
-		}
 		return distance;
 	}
 
@@ -210,7 +207,6 @@ class arGame {
 		var newDists = this.getDistances();
 		var distBools = [];
 		for (var i = 0; i < newDists.length; ++i) {
-			console.log(newDists[i]);
 			if (newDists[i] < 2.5 && newDists[i] > 0.2) {
 				distBools.push(true);
 			} else {
@@ -220,9 +216,6 @@ class arGame {
 
 		for (var i = 0; i < distBools.length; i++) {
 			if (!distBools[i]) {
-				console.log("False");
-				console.log(newDists);
-				console.log(distBools);
 				return false;
 			}
 		}
@@ -284,8 +277,6 @@ function startGame() {
 	marker22 = iframe.getElementById("marker6");
 	marker23 = iframe.getElementById("marker7");
 	marker24 = iframe.getElementById("marker8");
-
-	// !!TODO!! use clearInterval(gameInterval) somewhere to end the game loop
 	gameInterval = setInterval(gameLoop, 100);
 }
 
@@ -325,8 +316,6 @@ function endGame() {
 function processEnd() {
 	var newTimeStr = watch.timeStr();
 	var newMilli = watch.getMillTime();
-	console.log(newTimeStr);
-	console.log(newMilli);
 	var name = textarea.value;
 	textarea.value = "";
 	if (name == "") {
