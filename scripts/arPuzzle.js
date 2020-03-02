@@ -294,8 +294,7 @@ class arGame {
 // function that progresses the game
 var gameLoop = function() {
 	if (watch.isRunning()) timer.innerHTML = watch.tick(100); // updates the time in the UI
-	if (1)
-		// game.checkCompleted()
+	if (game.checkCompleted())
 		// gets the current distances and checks if the puzzle is completed.
 		endGame(); // ends the game if the puzzle is completed
 };
