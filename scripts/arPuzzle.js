@@ -9,11 +9,40 @@ var marker23;
 var marker24;
 
 var scores = [[], [], []];
-for (var i = 0; i < 5; ++i) {
-	scores[0].push("EMPTY");
-	scores[1].push("99:99.9");
-	scores[2].push(9999999999);
-}
+window.onload = () => {
+	if (sessionStorage.length == 1) {
+		for (var i = 0; i < 5; ++i) {
+			scores[0].push("EMPTY");
+			scores[1].push("99:99.9");
+			scores[2].push(9999999999);
+		}
+		sessionStorage.setItem("names", JSON.stringify(scores[0]));
+		sessionStorage.setItem("timestr", JSON.stringify(scores[1]));
+		sessionStorage.setItem("time", JSON.stringify(scores[2]));
+		console.log(sessionStorage);
+		console.log("Session Storage created.");
+		updateScoreboard();
+	} else {
+		let nameArray = JSON.parse(sessionStorage.getItem("names"));
+		let timestrArray = JSON.parse(sessionStorage.getItem("timestr"));
+		let timeArray = JSON.parse(sessionStorage.getItem("time"));
+		console.log(sessionStorage);
+		console.log("SessionStorage Retreived");
+		for (let i = 0; i < 3; i++) {
+			for (let j = 0; j < nameArray.length; j++) {
+				if (i == 0) {
+					scores[i][j] = nameArray[j];
+				} else if (i == 1) {
+					scores[i][j] = timestrArray[j];
+				} else {
+					scores[i][j] = timeArray[j];
+				}
+			}
+		}
+		console.log(scores);
+		updateScoreboard();
+	}
+};
 
 var endMessage = document.getElementById("message");
 // var textarea = document.getElementById("textarea");
@@ -31,6 +60,7 @@ var submitBtn = document.getElementById("submitBtn");
 submitBtn.addEventListener("click", function() {
 	btnClicked("submitBtn");
 });
+
 var timer = document.getElementById("timerDisplay"); // gets the timer from the document
 
 // Define UI behaviors
@@ -246,16 +276,26 @@ class arGame {
 			scores[1].splice(5, 1);
 			scores[2].splice(5, 1);
 		}
+		this.updateSessionScores();
 	}
 
+	// The function updates the session storage with the new scores
+	updateSessionScores() {
+		sessionStorage.setItem("names", JSON.stringify(scores[0]));
+		sessionStorage.setItem("timestr", JSON.stringify(scores[1]));
+		sessionStorage.setItem("time", JSON.stringify(scores[2]));
+		console.log(sessionStorage);
+		console.log("Session Storage Updated.");
+	}
 	// progresses the game state and calculates game information from the current state
-	continue() {}
+	// continue() {}
 }
 
 // function that progresses the game
 var gameLoop = function() {
 	if (watch.isRunning()) timer.innerHTML = watch.tick(100); // updates the time in the UI
-	if (game.checkCompleted())
+	if (1)
+		// game.checkCompleted()
 		// gets the current distances and checks if the puzzle is completed.
 		endGame(); // ends the game if the puzzle is completed
 };
@@ -384,5 +424,3 @@ function displayEndScreen() {
 	}
 	scoreboard.style.display = "none";
 }
-
-updateScoreboard();
